@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../crypto/bloc/crypto_bloc.dart';
 import '../crypto/bloc/crypto_event.dart';
 import '../crypto/bloc/crypto_state.dart';
+import 'detail_bottom_sheet.dart';
 
 class FavoritesPage extends StatelessWidget {
   final CryptoBloc bloc;
@@ -44,6 +45,14 @@ class FavoritesPage extends StatelessWidget {
                       icon: Icon(Icons.favorite, color: Colors.black),
                       onPressed: () => bloc.add(ToggleFavorite(crypto.uuid)),
                     ),
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (_) => DetailBottomSheet(crypto: crypto),
+                      );
+                    },
                   );
                 },
               );

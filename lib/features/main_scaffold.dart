@@ -100,7 +100,7 @@ class _MainScaffoldState extends State<MainScaffold> {
               Navigator.pop(context);
               context.read<AuthBloc>().add(LogoutRequested());
             },
-            child: const Text('Evet'),
+            child: const Text(MainStrings.yes),
           ),
         ],
       ),
@@ -115,4 +115,5 @@ class MainStrings {
   static const String cancel = 'Cancel';
   static const String crypto = 'Crypto';
   static const String favorites = 'Favorites';
+  static const String yes = 'Yes';
 }
