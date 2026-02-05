@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../auth/bloc/auth_bloc.dart';
 import '../../auth/bloc/auth_event.dart';
+import '../auth/bloc/auth_state.dart';
 import '../core/network/dio_client.dart';
+import '../crypto/bloc/crypto_event.dart';
 import '../crypto/data/datasource/crypto_remote_data_source.dart';
 import '../crypto/repo/crypto_repository.dart';
 import 'favorites_page.dart';
@@ -22,46 +24,60 @@ class _MainScaffoldState extends State<MainScaffold> {
   late final DioClient dioClient;
   late final CryptoRemoteDataSource remote;
   late final CryptoRepositoryImpl repository;
-  late final CryptoBloc cryptoBloc;
+  CryptoBloc? cryptoBloc;
 
   @override
-  void initState() {
-    super.initState();
-    dioClient = DioClient();
-    remote = CryptoRemoteDataSource(dioClient.dio);
-    repository = CryptoRepositoryImpl(remote);
-    cryptoBloc = CryptoBloc(repository);
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final authState = context.read<AuthBloc>().state;
+
+    if (authState is Authenticated) {
+      final userId = authState.user.id;
+
+      dioClient = DioClient();
+      remote = CryptoRemoteDataSource(dioClient.dio);
+      repository = CryptoRepositoryImpl(remote);
+
+      cryptoBloc ??= CryptoBloc(repository, userId)..add(FetchCryptos());
+    }
   }
 
   @override
   void dispose() {
-    cryptoBloc.close();
+    cryptoBloc?.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: cryptoBloc,
+      value: cryptoBloc!,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(_currentIndex == 0 ? MainStrings.crypto : MainStrings.favorites),
-          titleTextStyle:TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Colors.black),
+          title: Text(
+            _currentIndex == 0 ? MainStrings.crypto : MainStrings.favorites,
+          ),
+          titleTextStyle: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
           actions: _currentIndex == 0
               ? [
-            IconButton(
-              icon: const Icon(Icons.logout),
-              color: Colors.black,
-              onPressed: () => _showLogoutDialog(context),
-            ),
-          ]
+                  IconButton(
+                    icon: const Icon(Icons.logout),
+                    color: Colors.black,
+                    onPressed: () => _showLogoutDialog(context),
+                  ),
+                ]
               : null,
         ),
         body: IndexedStack(
           index: _currentIndex,
           children: [
-            HomePage(bloc: cryptoBloc),
-            FavoritesPage(bloc: cryptoBloc),
+            HomePage(bloc: cryptoBloc!),
+            FavoritesPage(bloc: cryptoBloc!),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -70,12 +86,10 @@ class _MainScaffoldState extends State<MainScaffold> {
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
-              backgroundColor: Colors.black,
               label: MainStrings.home,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.favorite),
-              backgroundColor: Colors.black,
               label: MainStrings.favorites,
             ),
           ],

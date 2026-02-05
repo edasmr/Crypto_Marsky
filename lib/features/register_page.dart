@@ -42,6 +42,7 @@ class _RegisterPageState extends State<RegisterPage> {
           padding: const EdgeInsets.all(24),
           child: Column(
             children: [
+              Image.asset(LoginStrings.logo),
               TextField(
                 controller: emailController,
                 decoration: const InputDecoration(labelText: RegisterStrings.email),

@@ -34,15 +34,13 @@ class DetailBottomSheet extends StatelessWidget {
                   ),
                 ),
               ),
-
-              /// Header
               Row(
                 children: [
                   Image.network(
                     crypto.iconUrl,
                     width: 40,
                     errorBuilder: (_, __, ___) =>
-                    const Icon(Icons.monetization_on),
+                        const Icon(Icons.monetization_on),
                   ),
                   const SizedBox(width: 12),
                   Column(
@@ -51,7 +49,9 @@ class DetailBottomSheet extends StatelessWidget {
                       Text(
                         crypto.name,
                         style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Text('${crypto.symbol} • Rank ${crypto.rank}'),
                     ],
@@ -60,14 +60,11 @@ class DetailBottomSheet extends StatelessWidget {
               ),
 
               const SizedBox(height: 24),
-
-              /// Price Info
               _infoRow('Price', '\$${crypto.price.toStringAsFixed(2)}'),
               _infoRow(
                 'Change',
                 '${crypto.change.toStringAsFixed(2)}%',
-                valueColor:
-                crypto.change >= 0 ? Colors.green : Colors.red,
+                valueColor: crypto.change >= 0 ? Colors.green : Colors.red,
               ),
 
               const SizedBox(height: 24),
@@ -78,10 +75,7 @@ class DetailBottomSheet extends StatelessWidget {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
-              SizedBox(
-                height: 200,
-                child: PriceChart(cryptoUuid: crypto.uuid),
-              ),
+              SizedBox(height: 200, child: PriceChart(cryptoUuid: crypto.uuid)),
             ],
           ),
         );
@@ -98,10 +92,7 @@ class DetailBottomSheet extends StatelessWidget {
           Text(label),
           Text(
             value,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: valueColor,
-            ),
+            style: TextStyle(fontWeight: FontWeight.bold, color: valueColor),
           ),
         ],
       ),

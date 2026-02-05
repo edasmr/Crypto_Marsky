@@ -25,11 +25,7 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Icon(
-              Icons.twenty_three_mp_rounded,
-              size: 64,
-              color: Colors.red,
-            ),
+            Image.asset(LoginStrings.logo),
             const SizedBox(height: 8),
             const Text(
               LoginStrings.welcomeText,
@@ -92,4 +88,7 @@ class LoginStrings {
   static const String passwordField = 'Password';
   static const String loginButton = 'Login';
   static const String registerButton = 'Don’t have an account? Register';
+  static const logo = 'assets/images/crypto_icon.png';
+  static const logo2 = 'assets/images/cryptocurrencies.png';
+
 }

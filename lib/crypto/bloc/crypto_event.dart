@@ -12,3 +12,8 @@ class ToggleFavorite extends CryptoEvent {
 
   ToggleFavorite(this.uuid);
 }
+class LoadFavorites  extends CryptoEvent {
+  final String uuid;
+
+  LoadFavorites(this.uuid);
+}

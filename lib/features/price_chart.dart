@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +5,7 @@ import '../core/network/dio_client.dart';
 
 class PriceChart extends StatefulWidget {
   final String cryptoUuid;
+
   const PriceChart({super.key, required this.cryptoUuid});
 
   @override
@@ -46,7 +46,7 @@ class _PriceChartState extends State<PriceChart> {
         setState(() => spots = temp);
       }
     } catch (e) {
-      debugPrint('Chart error FULL: $e');
+      debugPrint('Chart error : $e');
     }
   }
 
