@@ -41,8 +41,11 @@ class _RegisterPageState extends State<RegisterPage> {
         body: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Image.asset(LoginStrings.logo),
+              Image.asset(LoginStrings.logo,height: 300),
+              const SizedBox(height: 8),
               TextField(
                 controller: emailController,
                 decoration: const InputDecoration(labelText: RegisterStrings.email),
@@ -88,17 +91,15 @@ class _RegisterPageState extends State<RegisterPage> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (_) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: const Text(RegisterStrings.success),
         content: const Text(RegisterStrings.successInfo),
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context, rootNavigator: true)
-                  .pushAndRemoveUntil(
-                MaterialPageRoute(builder: (_) => const LoginPage()),
-                    (route) => false,
-              );
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
             },
             child: const Text(RegisterStrings.done),
           ),

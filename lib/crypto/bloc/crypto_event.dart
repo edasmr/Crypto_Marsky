@@ -17,3 +17,4 @@ class LoadFavorites  extends CryptoEvent {
 
   LoadFavorites(this.uuid);
 }
+class InitFavorites extends CryptoEvent {}

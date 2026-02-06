@@ -10,43 +10,52 @@ class AuthGate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthBloc, AppAuthState>(
+    return BlocConsumer<AuthBloc, AppAuthState>(
       listener: (context, state) {
         if (state is RegisteredSuccess) {
           showDialog(
             context: context,
+            barrierDismissible: false,
             builder: (_) => AlertDialog(
-              title: Text(
-                AuthGateStrings.success,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              content: Text(
-                AuthGateStrings.emailField,
-              ),
+              title: const Text(AuthGateStrings.success),
+              content: const Text(AuthGateStrings.emailField),
               actions: [
                 TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text(
-                    AuthGateStrings.done,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(AuthGateStrings.done),
                 ),
               ],
             ),
           );
         }
+
+        if (state is AuthError) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message)));
+        }
       },
-      child: BlocBuilder<AuthBloc, AppAuthState>(
-        builder: (context, state) {
-          if (state is Authenticated) {
-            return const MainScaffold();
-          }
-          return const LoginPage();
-        },
-      ),
+      builder: (context, state) {
+        debugPrint("AUTH GATE STATE: $state");
+
+        if (state is AuthLoading) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        if (state is Authenticated) {
+          return const MainScaffold();
+        }
+
+        return const LoginPage();
+      },
     );
   }
 }
+
 class AuthGateStrings {
   static const String success = 'Successful';
   static const String emailField = 'Registration successfully created.\nYou can now log in.';

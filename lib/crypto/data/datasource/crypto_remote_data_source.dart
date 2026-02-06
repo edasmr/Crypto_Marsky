@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-
+import '../../../core/network/dio_client.dart';
 import '../models/crypto_model.dart';
 
 class CryptoRemoteDataSource {
@@ -11,12 +11,19 @@ class CryptoRemoteDataSource {
     required int limit,
     required int offset,
   }) async {
-    final response = await dio.get(
-      'https://api.coinranking.com/v2/coins',
-      queryParameters: {'limit': limit, 'offset': offset},
-    );
+    try {
+      final response = await dio.get(
+        '/coins',
+        queryParameters: {'limit': limit, 'offset': offset},
+      );
 
-    final List list = response.data['data']['coins'];
-    return list.map((e) => CryptoModel.fromJson(e)).toList();
+      final List list = response.data['data']['coins'];
+
+      return list.map((e) => CryptoModel.fromJson(e)).toList();
+    } on DioException catch (e) {
+      throw Exception(NetworkException.getErrorMessage(e));
+    } catch (e) {
+      throw Exception('Unexpected error occurred');
+    }
   }
 }

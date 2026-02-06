@@ -15,6 +15,11 @@ class AuthBloc extends Bloc<AuthEvent, AppAuthState> {
     on<LogoutRequested>(_onLogout);
   }
 
+  @override
+  void onChange(Change<AppAuthState> change) {
+    super.onChange(change);
+    debugPrint("BLOC STATE CHANGE: ${change.nextState}");
+  }
   void _onAppStarted(AppStarted event, Emitter<AppAuthState> emit) {
     final user = repository.currentUser;
     if (user != null) {
@@ -25,31 +30,42 @@ class AuthBloc extends Bloc<AuthEvent, AppAuthState> {
   }
 
   Future<void> _onLogin(
-    LoginRequested event,
-    Emitter<AppAuthState> emit,
-  ) async {
+      LoginRequested event,
+      Emitter<AppAuthState> emit,
+      ) async {
     emit(AuthLoading());
 
     try {
-      final response = await repository.login(event.email, event.password);
+      final response =
+      await repository.login(event.email, event.password);
 
-      if (response.session != null) {
+      if (response.user != null) {
         emit(Authenticated(response.user!));
-        debugPrint('user: ${response.user}');
+        return; // 🔥 BU ÇOK ÖNEMLİ
+      }
+
+      emit(AuthError('Login failed'));
+    } on AuthApiException catch (e) {
+      if (e.statusCode == '400') {
+        emit(AuthError('Email or password is incorrect.'));
       } else {
-        emit(Unauthenticated());
+        emit(AuthError(e.message));
       }
     } catch (e) {
-      emit(AuthError(e.toString()));
+      emit(AuthError('An error occurred, please try again.'));
     }
   }
+
+
+
+
+
 
   Future<void> _onRegister(
     RegisterRequested event,
     Emitter<AppAuthState> emit,
   ) async {
     emit(AuthLoading());
-
     try {
       await repository.register(event.email, event.password);
       await repository.logout();

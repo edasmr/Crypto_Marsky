@@ -12,14 +12,21 @@ class CryptoBloc extends Bloc<CryptoEvent, CryptoState> {
   late final Box<String> favoritesBox;
 
   CryptoBloc(this.repository, this.userId) : super(CryptoInitial()) {
-    _initFavorites();
-
+    on<InitFavorites>(_onInitFavorites);
     on<FetchCryptos>(_onFetchCryptos);
     on<ToggleFavorite>(_onToggleFavorite);
+    add(InitFavorites());
   }
 
-  Future<void> _initFavorites() async {
-    favoritesBox = await Hive.openBox<String>('favorites_$userId');
+  Future<void> _onInitFavorites(
+      InitFavorites event,
+      Emitter<CryptoState> emit,
+      ) async {
+    try {
+      favoritesBox = await Hive.openBox<String>('favorites_$userId');
+    } catch (e) {
+      emit(CryptoError("Failed to load local favorites."));
+    }
   }
 
   Future<void> _onFetchCryptos(
@@ -44,31 +51,35 @@ class CryptoBloc extends Bloc<CryptoEvent, CryptoState> {
     }
   }
 
-  void _onToggleFavorite(
+  Future<void> _onToggleFavorite(
       ToggleFavorite event,
       Emitter<CryptoState> emit,
-      ) {
-    final currentFavorites = favoritesBox.values.toList();
+      ) async {
 
-    if (currentFavorites.contains(event.uuid)) {
-      final key = favoritesBox.keys.firstWhere(
-            (k) => favoritesBox.get(k) == event.uuid,
-        orElse: () => null,
-      );
-      if (key != null) {
-        favoritesBox.delete(key);
+    try {
+      final currentFavorites = favoritesBox.values.toList();
+
+      if (currentFavorites.contains(event.uuid)) {
+        final key = favoritesBox.keys.firstWhere(
+              (k) => favoritesBox.get(k) == event.uuid,
+        );
+        await favoritesBox.delete(key);
+      } else {
+        await favoritesBox.add(event.uuid);
       }
-    } else {
-      favoritesBox.add(event.uuid);
-    }
 
-    if (state is CryptoLoaded) {
-      emit(
-        CryptoLoaded(
-          (state as CryptoLoaded).cryptos,
-          favoritesBox.values.toList(),
-        ),
-      );
+      if (state is CryptoLoaded) {
+        emit(
+          CryptoLoaded(
+            (state as CryptoLoaded).cryptos,
+            favoritesBox.values.toList(),
+          ),
+        );
+      }
+
+    } catch (e) {
+      emit(CryptoError("Failed to update favorites."));
     }
   }
+
 }
