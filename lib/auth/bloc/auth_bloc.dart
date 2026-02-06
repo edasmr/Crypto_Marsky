@@ -15,12 +15,6 @@ class AuthBloc extends Bloc<AuthEvent, AppAuthState> {
     on<LogoutRequested>(_onLogout);
   }
 
-  @override
-  void onChange(Change<AppAuthState> change) {
-    super.onChange(change);
-    debugPrint("BLOC STATE CHANGE: ${change.nextState}");
-  }
-
   void _onAppStarted(AppStarted event, Emitter<AppAuthState> emit) {
     final user = repository.currentUser;
     if (user != null) {

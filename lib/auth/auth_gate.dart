@@ -38,7 +38,6 @@ class AuthGate extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        debugPrint("AUTH GATE STATE: $state");
 
         if (state is AuthLoading) {
           return const Scaffold(
