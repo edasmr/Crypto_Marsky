@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Image.asset(LoginStrings.logo, height: 300),
-              const SizedBox(height: 8),
+              const SizedBox(height: 16),
               const Text(
                 LoginStrings.welcomeText,
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),

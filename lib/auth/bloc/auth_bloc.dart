@@ -20,6 +20,7 @@ class AuthBloc extends Bloc<AuthEvent, AppAuthState> {
     super.onChange(change);
     debugPrint("BLOC STATE CHANGE: ${change.nextState}");
   }
+
   void _onAppStarted(AppStarted event, Emitter<AppAuthState> emit) {
     final user = repository.currentUser;
     if (user != null) {
@@ -30,18 +31,17 @@ class AuthBloc extends Bloc<AuthEvent, AppAuthState> {
   }
 
   Future<void> _onLogin(
-      LoginRequested event,
-      Emitter<AppAuthState> emit,
-      ) async {
+    LoginRequested event,
+    Emitter<AppAuthState> emit,
+  ) async {
     emit(AuthLoading());
 
     try {
-      final response =
-      await repository.login(event.email, event.password);
+      final response = await repository.login(event.email, event.password);
 
       if (response.user != null) {
         emit(Authenticated(response.user!));
-        return; // 🔥 BU ÇOK ÖNEMLİ
+        return;
       }
 
       emit(AuthError('Login failed'));
@@ -55,11 +55,6 @@ class AuthBloc extends Bloc<AuthEvent, AppAuthState> {
       emit(AuthError('An error occurred, please try again.'));
     }
   }
-
-
-
-
-
 
   Future<void> _onRegister(
     RegisterRequested event,

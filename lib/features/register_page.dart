@@ -45,7 +45,7 @@ class _RegisterPageState extends State<RegisterPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Image.asset(LoginStrings.logo,height: 300),
-              const SizedBox(height: 8),
+              const SizedBox(height: 16),
               TextField(
                 controller: emailController,
                 decoration: const InputDecoration(labelText: RegisterStrings.email),
