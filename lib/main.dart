@@ -10,7 +10,6 @@ import 'auth/bloc/auth_event.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await Hive.openBox<String>('favorites');
   await Supabase.initialize(
     url: 'https://ddfghbydzpdksanwwfnl.supabase.co',
     anonKey:

@@ -99,7 +99,6 @@ class _RegisterPageState extends State<RegisterPage> {
             onPressed: () {
               Navigator.pop(context);
               Navigator.pop(context);
-              Navigator.pop(context);
             },
             child: const Text(RegisterStrings.done),
           ),

@@ -12,25 +12,6 @@ class AuthGate extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AppAuthState>(
       listener: (context, state) {
-        if (state is RegisteredSuccess) {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) => AlertDialog(
-              title: const Text(AuthGateStrings.success),
-              content: const Text(AuthGateStrings.emailField),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text(AuthGateStrings.done),
-                ),
-              ],
-            ),
-          );
-        }
-
         if (state is AuthError) {
           ScaffoldMessenger.of(
             context,
@@ -55,8 +36,3 @@ class AuthGate extends StatelessWidget {
   }
 }
 
-class AuthGateStrings {
-  static const String success = 'Successful';
-  static const String emailField = 'Registration successfully created.\nYou can now log in.';
-  static const String done = 'Done';
-}

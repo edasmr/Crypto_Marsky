@@ -14,8 +14,6 @@ class Authenticated extends AppAuthState {
 
 class RegisteredSuccess extends AppAuthState {}
 
-class DuplicateRegister extends AppAuthState {}
-
 class Unauthenticated extends AppAuthState {}
 
 class AuthError extends AppAuthState {

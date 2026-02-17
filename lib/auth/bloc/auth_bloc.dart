@@ -14,7 +14,6 @@ class AuthBloc extends Bloc<AuthEvent, AppAuthState> {
     on<RegisterRequested>(_onRegister);
     on<LogoutRequested>(_onLogout);
   }
-
   void _onAppStarted(AppStarted event, Emitter<AppAuthState> emit) {
     final user = repository.currentUser;
     if (user != null) {
@@ -63,7 +62,7 @@ class AuthBloc extends Bloc<AuthEvent, AppAuthState> {
       debugPrint('REGISTER ERROR RAW: $e');
 
       if (e is AuthApiException) {
-        if (e.statusCode == ' 422') {
+        if (e.statusCode == '422') {
           emit(AuthError('This email address is already registered.'));
           return;
         }

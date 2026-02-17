@@ -38,7 +38,7 @@ class DetailBottomSheet extends StatelessWidget {
                 children: [
                   Image.network(
                     crypto.iconUrl,
-                    width: 40,
+                    width: 60,
                     errorBuilder: (_, __, ___) =>
                         const Icon(Icons.monetization_on),
                   ),
@@ -68,8 +68,6 @@ class DetailBottomSheet extends StatelessWidget {
               ),
 
               const SizedBox(height: 24),
-
-              /// Chart
               const Text(
                 'Price History',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
